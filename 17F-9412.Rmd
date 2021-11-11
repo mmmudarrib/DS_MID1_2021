@@ -1,0 +1,55 @@
+---
+title: "Data Science Sessional 1 Exam 2021"
+author: "17F-9412"
+date: "10/21/2021"
+output: pdf_document
+---
+
+```{r}
+install.packages("magick",repos = "https://cran.rstudio.com")
+install.packages("pdftools",repos="https://cran.rstudio.com")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("EBImage")
+install.packages("tesseract")
+```
+
+```{r}
+library("magick")
+library("pdftools")
+library("tesseract")
+new.function<-function(f){
+  fn <- "123.png"
+#Check its existence
+if (file.exists(fn)) {
+  #Delete file if it exists
+  file.remove(fn)
+}
+  g<-file.path("E10/",f)
+image <- pdftools::pdf_convert(g,dpi=1000)[2]
+  image1<-EBImage::readImage(image_pdf)
+image1<-image1*1.5
+d1<-dim(image1)[1]*0.4598
+d2<-dim(image1)[1]*0.9075
+d3<-dim(image1)[2]*0.1540
+d4<-dim(image1)[2]*0.2693
+croped<-image1[d1:d2 ,d3:d4,]
+print(image1)
+writeImage(croped,"123.png", quality =100)
+numbers2 <- tesseract(options = list(tessedit_char_whitelist = ".0123456789"))
+text<-ocr("123.png",engine = numbers2)
+out<-strsplit(text, "\n")
+out<-lapply(out, function(x){x[!x ==""]})
+out<-lapply(out, function(x){strsplit(x," ")})
+out
+}
+
+new.function("e_10_gasoline_price_notification_effective_dated_september_01_2019.pdf")
+
+```
+
+```{r}
+out
+data<-c(out[1][1][1],out[1][1][2],out[1][1][3],out[1][1][4],out[1][1][5])
+data
+```
